@@ -1,0 +1,4 @@
+[
+    {"keys": [";"], "command": "insert_line_ending"},
+    {"keys": ["ctrl+i"], "command": "insert_class_variable"}
+]
