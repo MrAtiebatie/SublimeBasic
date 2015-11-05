@@ -9,9 +9,12 @@ import json
 class NewPhpClassCommand(sublime_plugin.TextCommand):
 
     folder = ''
+    packages = ''
 
     def run(self, edit):
         view = self.view
+
+        self.packages = sublime.packages_path() + '/'
 
         # Path variables
         folders = view.window().folders()
@@ -19,11 +22,22 @@ class NewPhpClassCommand(sublime_plugin.TextCommand):
         if (len(folders) > 0):
             self.folder = folders[0] + '/'
             filename = filename.replace(self.folder, '')
-            print(filename)
 
-        print(self.is_psr4(view))
+        namespaces = self.get_psr4_namespaces(view)
 
-    def is_psr4(self, view):
+        if namespaces:
+            for namespace, folder in namespaces.items():
+                if folder in filename:
+                    namespace = namespace.replace('\\', '/')
+                    filename = filename.replace(folder, namespace)
+
+                    # Now extract the namespace and classname
+                    namespace = os.path.dirname(filename)
+                    classname = os.path.basename(filename).replace('.php', '')
+
+                    view.window().run_command('insert_snippet', { 'name': 'Packages/SublimePlus/class.sublime-snippet', '$NAMESPACE': namespace, '$CLASSNAME': classname })
+
+    def get_psr4_namespaces(self, view):
         composer = self.folder + 'composer.json'
         content = self.file_get_contents(composer)
 
@@ -36,7 +50,7 @@ class NewPhpClassCommand(sublime_plugin.TextCommand):
 
                 # Check if PSR4 key exists
                 if 'psr-4' in autoload:
-                    return True
+                    return autoload['psr-4']
 
         return False
 

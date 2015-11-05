@@ -1,12 +1,11 @@
 <snippet>
     <content><![CDATA[
-namespace ${TM_FILEPATH/^.+\/[a-z]+\/([\w]+)\/([\w]+)\/\w+\.php$/$1\\$2/};
+namespace $NAMESPACE;
 
 /**
- * $TM_FILEPATH
- * $TM_FILENAME
+ * ${CLASSNAME/^(\w)|(?:([A-Z])(\w))/(?1\l$1:)(?2 \l$2$3:)/g}
  */
-class ${TM_FILENAME/^([\w\/]+)\.php$/$1/} extends ${1:AnotherClass}
+class $CLASSNAME extends ${1:AnotherClass}
 {
     ${0}
 }
