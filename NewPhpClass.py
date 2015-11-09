@@ -2,6 +2,7 @@ import sublime
 import sublime_plugin
 import os
 import json
+import sys
 
 #--------------------------------------------------------
 #   New PHP class
@@ -22,6 +23,14 @@ class NewPhpClassCommand(sublime_plugin.TextCommand):
         if (len(folders) > 0):
             self.folder = folders[0] + '/'
             filename = filename.replace(self.folder, '')
+
+        tags = open(self.folder + '.tags', 'r', newline='', encoding='utf-8')
+        with tags as inF:
+            for line in inF:
+                if 'setRouteResolver' in line:
+                    print(line.strip())
+
+        return
 
         namespaces = self.get_psr4_namespaces(view)
 
