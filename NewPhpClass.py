@@ -2,6 +2,7 @@ import sublime
 import sublime_plugin
 import os
 import json
+from xml.etree import ElementTree
 
 #--------------------------------------------------------
 #   New PHP class
@@ -25,6 +26,8 @@ class NewPhpClassCommand(sublime_plugin.TextCommand):
 
         namespaces = self.get_psr4_namespaces(view)
 
+        print(namespaces)
+
         if namespaces:
             for namespace, folder in namespaces.items():
                 if folder in filename:
@@ -32,10 +35,12 @@ class NewPhpClassCommand(sublime_plugin.TextCommand):
                     filename = filename.replace(folder, namespace)
 
                     # Now extract the namespace and classname
-                    namespace = os.path.dirname(filename)
+                    namespace = os.path.dirname(filename).replace('/', '\\')
                     classname = os.path.basename(filename).replace('.php', '')
 
-                    view.window().run_command('insert_snippet', { 'name': 'Packages/SublimePlus/class.sublime-snippet', '$NAMESPACE': namespace, '$CLASSNAME': classname })
+                    xml = ElementTree.parse(self.packages + 'SublimePlus/class.sublime-snippet')
+                    snippet = xml.getroot().find('content').text
+                    view.window().run_command('insert_snippet', dict(contents=snippet, NAMESPACE=namespace, CLASSNAME=classname))
 
     def get_psr4_namespaces(self, view):
         composer = self.folder + 'composer.json'
