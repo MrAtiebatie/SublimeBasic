@@ -24,6 +24,14 @@ class NewPhpClassCommand(sublime_plugin.TextCommand):
             self.folder = folders[0] + '/'
             filename = filename.replace(self.folder, '')
 
+        tags = open(self.folder + '.tags', 'r', newline='', encoding='utf-8')
+        with tags as inF:
+            for line in inF:
+                if 'setRouteResolver' in line:
+                    print(line.strip())
+
+        return
+
         namespaces = self.get_psr4_namespaces(view)
 
         print(namespaces)
