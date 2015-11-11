@@ -1,12 +1,9 @@
 import re
-import copy
 import sublime
 import sublime_plugin
 
 #--------------------------------------------------------
-#
-#   Insert Line Ending Plugin
-#
+# Insert Line Ending Plugin
 #--------------------------------------------------------
 class InsertLineEndingCommand(sublime_plugin.TextCommand):
     def run(self, edit):

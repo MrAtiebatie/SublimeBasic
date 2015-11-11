@@ -1,0 +1,9 @@
+[
+	{
+		"caption": "New PHP class...",
+		"command": "new_php_class",
+		"args": {
+			"paths": []
+		}
+	}
+]

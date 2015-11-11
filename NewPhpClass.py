@@ -1,75 +1,46 @@
 import sublime
 import sublime_plugin
 import os
-import json
-from xml.etree import ElementTree
+from .SublimeBasic import Basic
 
 #--------------------------------------------------------
-#   New PHP class
+# New PHP class
 #--------------------------------------------------------
-class NewPhpClassCommand(sublime_plugin.TextCommand):
+class NewPhpClassCommand(sublime_plugin.WindowCommand):
 
-    folder = ''
-    packages = ''
+    def run(self, paths = []):
+        self._paths = paths
+        window = sublime.active_window()
+        view = window.active_view()
 
-    def run(self, edit):
-        view = self.view
+        window.run_command('hide_panel')
+        window.show_input_panel('File Name:', '', self.create_file, None, None)
 
-        self.packages = sublime.packages_path() + '/'
+    def create_file(self, filename):
+        filename = self._paths[0] + '/' + filename
 
-        # Path variables
-        folders = view.window().folders()
-        filename = view.file_name()
-        if (len(folders) > 0):
-            self.folder = folders[0] + '/'
-            filename = filename.replace(self.folder, '')
+        if filename.endswith('.php') != True:
+            filename += '.php'
 
-        tags = open(self.folder + '.tags', 'r', newline='', encoding='utf-8')
-        with tags as inF:
-            for line in inF:
-                if 'setRouteResolver' in line:
-                    print(line.strip())
+        if os.path.isfile(filename):
+            sublime.error_message('File already exists.')
+            return
 
-        return
+        with open(filename, 'a'):
+            os.utime(filename, None)
+            view = sublime.active_window().open_file(filename)
 
-        namespaces = self.get_psr4_namespaces(view)
+            # v = self.window.new_file()
+            # v.settings().set('default_dir', self._paths[0])
+            # v.set_syntax_file('Packages/PHP/PHP.tmLanguage')
+            # v.set_name(filename)
 
-        print(namespaces)
+            self.insert_template(view)
 
-        if namespaces:
-            for namespace, folder in namespaces.items():
-                if folder in filename:
-                    namespace = namespace.replace('\\', '/')
-                    filename = filename.replace(folder, namespace)
+    def insert_template(self, view):
+        if not view.is_loading():
+            print("Insert template")
+            view.run_command('insert_file_template', { 'template': Basic().package_path() + '/class.sublime-snippet' })
 
-                    # Now extract the namespace and classname
-                    namespace = os.path.dirname(filename).replace('/', '\\')
-                    classname = os.path.basename(filename).replace('.php', '')
-
-                    xml = ElementTree.parse(self.packages + 'SublimePlus/class.sublime-snippet')
-                    snippet = xml.getroot().find('content').text
-                    view.window().run_command('insert_snippet', dict(contents=snippet, NAMESPACE=namespace, CLASSNAME=classname))
-
-    def get_psr4_namespaces(self, view):
-        composer = self.folder + 'composer.json'
-        content = self.file_get_contents(composer)
-
-        if (content):
-            content = json.loads(content)
-
-            # Check if autoload key exists
-            if 'autoload' in content:
-                autoload = content["autoload"]
-
-                # Check if PSR4 key exists
-                if 'psr-4' in autoload:
-                    return autoload['psr-4']
-
-        return False
-
-    def file_get_contents(self, filename):
-        if (os.path.isfile(filename) != True):
-            return False
-
-        with open(filename) as line:
-            return line.read()
+        else:
+            sublime.set_timeout(lambda: self.insert_template(view), 10)

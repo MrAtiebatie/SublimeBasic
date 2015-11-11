@@ -2,9 +2,7 @@ import sublime
 import sublime_plugin
 
 #--------------------------------------------------------
-#
-#   Insert Class Variable Plugin
-#
+# Insert Class Variable Plugin
 #--------------------------------------------------------
 class InsertClassVariableCommand(sublime_plugin.TextCommand):
 
