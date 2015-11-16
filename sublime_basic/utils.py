@@ -24,7 +24,7 @@ class Utils:
 
     # Return Sublime Basic package path
     def package_path(self):
-        return sublime.packages_path() + '/SublimePlus/'
+        return sublime.packages_path() + '/SublimeBasic/'
 
     # Get namespaces from composer.json
     def get_psr4_namespaces(self):
