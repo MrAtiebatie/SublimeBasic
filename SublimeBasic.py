@@ -6,9 +6,6 @@ import json
 
 class Basic:
 
-    # def __init__(self):
-    #     print(self)
-
     # Get project path
     def project_path(self):
         folders = sublime.active_window().folders()
@@ -31,8 +28,7 @@ class Basic:
 
     # Get namespaces from composer.json
     def get_psr4_namespaces(self):
-        composer = self.project_path() + 'composer.json'
-        content = self.file_get_contents(composer)
+        content = self.file_get_contents('composer.json')
 
         if (content):
             content = json.loads(content)
@@ -47,8 +43,15 @@ class Basic:
 
         return False
 
+    # Get view contents
+    def get_full_view(self, view):
+        return view.substr(sublime.Region(0, view.size()))
+
     # Get the contents of a given filename
-    def file_get_contents(self, filename):
+    def file_get_contents(self, filename, relative=True):
+        if relative:
+            filename = self.project_path() + filename
+
         if (os.path.isfile(filename) != True):
             return False
 
