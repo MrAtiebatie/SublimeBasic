@@ -27,7 +27,24 @@ class ImplementInterfaceCommand(sublime_plugin.TextCommand):
                             filename = line.strip().split()[1]
                             contract = Basic().file_get_contents(filename)
 
-                            print(self.get_class_methods(contract))
+                            class_methods = self.get_class_methods(content)
+                            contract_methods = self.get_class_methods(contract)
+
+                            # Here we calculate the difference between the required methods
+                            # from the interface and the actual class methods
+                            missing_methods = list(set(contract_methods) - set(class_methods))
+
+                            if len(missing_methods) is 0:
+                                sublime.message_dialog('Required interface methods already implemented.')
+
+                            for method in missing_methods:
+                                class_ending = view.find_all('[}]')
+
+                                if len(class_ending) > 0:
+                                    class_ending = class_ending[-1]
+                                    row, col = view.rowcol(class_ending.a)
+
+                                    view.insert(edit, view.text_point(row, col), "\n\n\t" + method + "\n\t{\n\n\t}\n")
 
                             return
 
@@ -65,11 +82,12 @@ class ImplementInterfaceCommand(sublime_plugin.TextCommand):
 
     # Get class methods
     def get_class_methods(self, content):
-        matches = re.findall('([public |static |abstract |protected |private ]+function [^)]+\))', content, re.MULTILINE)
-        methods = []
+        # @todo get method comments with the following regex: (\/\*([^*]|[\s]|\*+[^*\/]|[\s])*\*\/)
+        methods = re.findall('([public |static |abstract |protected |private ]+function [^)]+\))', content, re.MULTILINE)
+        result = []
 
-        if len(matches) > 0:
-            for match in matches:
-                methods.append(match.strip())
+        if len(methods) > 0:
+            for match in methods:
+                result.append(match.strip())
 
-        return methods
+        return result

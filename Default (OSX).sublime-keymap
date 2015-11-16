@@ -1,5 +1,4 @@
 [
 	{"keys": [";"], "command": "insert_line_ending"},
     {"keys": ["super+i"], "command": "insert_class_variable"},
-    {"keys": ["super+`"], "command": "basic_auto_complete"},
 ]
