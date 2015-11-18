@@ -7,7 +7,7 @@ import sublime_plugin
 #--------------------------------------------------------
 class InsertLineEndingCommand(sublime_plugin.TextCommand):
     def run(self, edit):
-        settings = sublime.load_settings("SublimePlus.sublime-settings")
+        settings = sublime.load_settings("SublimeBasic.sublime-settings")
         view = self.view
 
         # Accepted langs

@@ -25,5 +25,19 @@
                 ]
             }
         ]
+    },
+    {
+        "caption": "SublimeBasic",
+        "children":
+        [
+            {
+                "caption": "Implement interface",
+                "command": "implement_interface"
+            },
+            {
+                "caption": "Insert class variable",
+                "command": "insert_class_variable"
+            }
+        ]
     }
 ]
