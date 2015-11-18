@@ -37,4 +37,4 @@ class BasicAutoCompleteCommand(sublime_plugin.EventListener):
             print(line)
 
 
-        return autocomplete.find_defenition(view, variable)
+        # return autocomplete.find_defenition(view, variable)
