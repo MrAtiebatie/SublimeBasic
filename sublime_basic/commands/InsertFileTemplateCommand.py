@@ -2,7 +2,7 @@ import sublime
 import sublime_plugin
 import os
 from xml.etree import ElementTree
-from .SublimeBasic import Basic
+from ..utils import Utils
 
 #--------------------------------------------------------
 # Insert file template
@@ -20,7 +20,7 @@ class InsertFileTemplateCommand(sublime_plugin.TextCommand):
             folder = folders[0] + '/'
             filename = filename.replace(folder, '')
 
-        namespaces = Basic().get_psr4_namespaces()
+        namespaces = Utils().get_psr4_namespaces()
 
         if namespaces:
             for namespace, folder in namespaces.items():

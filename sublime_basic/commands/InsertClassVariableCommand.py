@@ -31,6 +31,7 @@ class InsertClassVariableCommand(sublime_plugin.TextCommand):
 
 class InsertVariableCommand(sublime_plugin.TextCommand):
     def run(self, edit, visiblity, data_type, comment):
+        print(visiblity)
         view = self.view
         sel = view.sel()
 
@@ -38,6 +39,7 @@ class InsertVariableCommand(sublime_plugin.TextCommand):
         indentation = self.get_indentation()
 
         region = view.find('class (.*)', 0)
+        print(region)
         row, col = view.rowcol(region.a)
         selection = view.substr(sel[0])
 

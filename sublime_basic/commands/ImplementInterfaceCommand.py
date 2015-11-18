@@ -1,18 +1,19 @@
 import re
 import sublime
 import sublime_plugin
-from .SublimeBasic import Basic
+from ..utils import Utils
 
 #--------------------------------------------------------
 # Implement Interface Plugin
+# @todo implement class detection
 #--------------------------------------------------------
 class ImplementInterfaceCommand(sublime_plugin.TextCommand):
 
     def run(self, edit):
         view = self.view
 
-        project_path = Basic().project_path()
-        content = Basic().get_full_view(view)
+        project_path = Utils().project_path()
+        content = Utils().get_full_view(view)
         interfaces = self.get_interface(content)
 
         for interface in interfaces:
@@ -25,14 +26,18 @@ class ImplementInterfaceCommand(sublime_plugin.TextCommand):
                     for line in inF:
                         if 'interface ' + interface in line:
                             filename = line.strip().split()[1]
-                            contract = Basic().file_get_contents(filename)
+                            contract = Utils().file_get_contents(filename)
 
                             class_methods = self.get_class_methods(content)
-                            contract_methods = self.get_class_methods(contract)
+                            contract_methods = self.get_interface_methods(contract)
+                            missing_methods = []
 
                             # Here we calculate the difference between the required methods
                             # from the interface and the actual class methods
-                            missing_methods = list(set(contract_methods) - set(class_methods))
+                            for method in contract_methods:
+                                print(method)
+                                if not any(m in method for m in class_methods):
+                                    missing_methods.append(method)
 
                             if len(missing_methods) is 0:
                                 sublime.message_dialog('Required interface methods already implemented.')
@@ -44,7 +49,7 @@ class ImplementInterfaceCommand(sublime_plugin.TextCommand):
                                     class_ending = class_ending[-1]
                                     row, col = view.rowcol(class_ending.a)
 
-                                    view.insert(edit, view.text_point(row, col), "\n\n\t" + method + "\n\t{\n\n\t}\n")
+                                    view.insert(edit, view.text_point(row, col), "\n\t" + method + "\n\t{\n\n\t}\n")
 
                             return
 
@@ -84,6 +89,17 @@ class ImplementInterfaceCommand(sublime_plugin.TextCommand):
     def get_class_methods(self, content):
         # @todo get method comments with the following regex: (\/\*([^*]|[\s]|\*+[^*\/]|[\s])*\*\/)
         methods = re.findall('([public |static |abstract |protected |private ]+function [^)]+\))', content, re.MULTILINE)
+        result = []
+
+        if len(methods) > 0:
+            for match in methods:
+                result.append(match.strip())
+
+        return result
+
+    # Get interface methods
+    def get_interface_methods(self, content):
+        methods = re.findall('[ ]+(/\*\*(?:\s.+)+[\s]+[public |static |abstract |protected |private ]+function [^)]+\))', content, re.MULTILINE)
         result = []
 
         if len(methods) > 0:
