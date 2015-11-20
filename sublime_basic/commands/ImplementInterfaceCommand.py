@@ -16,6 +16,9 @@ class ImplementInterfaceCommand(sublime_plugin.TextCommand):
         content = Utils().get_full_view(view)
         interfaces = self.get_interface(content)
 
+        window = sublime.active_window()
+        files = window.lookup_symbol_in_index(interfaces[0])
+
         for interface in interfaces:
             if isinstance(interface, str):
                 # @todo implement the check by namespace
