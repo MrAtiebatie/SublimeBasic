@@ -30,17 +30,11 @@ class NewPhpClassCommand(sublime_plugin.WindowCommand):
             os.utime(filename, None)
             view = sublime.active_window().open_file(filename)
 
-            # v = self.window.new_file()
-            # v.settings().set('default_dir', self._paths[0])
-            # v.set_syntax_file('Packages/PHP/PHP.tmLanguage')
-            # v.set_name(filename)
-
             self.insert_template(view)
 
     def insert_template(self, view):
         if not view.is_loading():
-            print("Insert template")
-            view.run_command('insert_file_template', { 'template': Utils().package_path() + '/class.sublime-snippet' })
+            view.run_command('insert_file_template', { 'template': Utils().package_path() + '/sublime_basic/templates/class.sublime-snippet' })
 
         else:
             sublime.set_timeout(lambda: self.insert_template(view), 10)
