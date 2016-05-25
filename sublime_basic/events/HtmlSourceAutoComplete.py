@@ -7,7 +7,8 @@ from ..utils import Utils
 
 class HtmlSourceAutoComplete(sublime_plugin.EventListener):
     def on_query_completions(self, view, prefix, locations):
-        scope = view.syntax_name(view.sel()[0].b)
+
+        scope = view.scope_name(view.sel()[0].b)
         scopes = ['text.html.basic' 'source.js.embedded.html' 'string.quoted.double.html' 'meta.tag.inline.any.html']
 
         if scope not in scopes:
