@@ -8,6 +8,7 @@ import sublime_plugin
 class InsertLineEndingCommand(sublime_plugin.TextCommand):
     def run(self, edit):
         settings = sublime.load_settings("SublimeBasic.sublime-settings")
+        print(settings)
         view = self.view
 
         # Accepted langs
@@ -32,6 +33,8 @@ class InsertLineEndingCommand(sublime_plugin.TextCommand):
                 line = view.line(sel.end())
 
                 character = self.choose_character(view, sel)
+
+                print(character)
 
                 # Don't add a semicolon if it's already there
                 if character in current_line:

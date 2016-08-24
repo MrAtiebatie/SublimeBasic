@@ -1,5 +1,5 @@
 [
-	{"keys": [";"], "command": "insert_line_ending"},
-    {"keys": ["super+i"], "command": "insert_class_variable"},
-    {"keys": ["super+shift+i"], "command": "implement_interface"}
+	{ "keys": [";"], "command": "insert_line_ending" },
+    { "keys": ["super+i"], "command": "insert_class_variable" },
+    { "keys": ["super+shift+i"], "command": "implement_interface" }
 ]
