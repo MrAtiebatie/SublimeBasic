@@ -8,10 +8,10 @@ from ..utils import Utils
 class HtmlSourceAutoComplete(sublime_plugin.EventListener):
     def on_query_completions(self, view, prefix, locations):
 
-        scope = view.scope_name(view.sel()[0].b)
-        scopes = ['text.html.basic' 'source.js.embedded.html' 'string.quoted.double.html' 'meta.tag.inline.any.html']
+        scope = view.scope_name(view.sel()[0].b).split(' ')
+        scopes = ['text.html.basic', 'source.js.embedded.html', 'string.quoted.double.html', 'meta.tag.inline.any.html']
 
-        if scope not in scopes:
+        if not any(x in scope for x in scopes):
             return
 
         project = Utils().project_path()
