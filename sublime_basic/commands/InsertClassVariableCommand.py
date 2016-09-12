@@ -49,7 +49,7 @@ class InsertVariableCommand(sublime_plugin.TextCommand):
         view.insert(edit, self.rowcol(row+3), indentation + ' * ' + comment + '\n')
         view.insert(edit, self.rowcol(row+4), indentation + ' * @var ' + data_type + ' ' + selection + '\n')
         view.insert(edit, self.rowcol(row+5), indentation + ' */ \n')
-        view.insert(edit, self.rowcol(row+6), indentation + visiblity + ' ' + selection + ';\n')
+        view.insert(edit, self.rowcol(row+6), indentation + visiblity + ' ' + selection + ';\n\n')
 
     def get_indentation(self):
         settings = self.view.settings()
