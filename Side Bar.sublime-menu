@@ -4,10 +4,19 @@
         "id": "side-bar-start-separator"
     },
 	{
-        "caption": "New PHP class...",
-		"command": "new_php_class",
-		"args": {
-			"paths": []
-		}
+        "caption": "PHP",
+        "children": [{
+            "caption": "New PHP class...",
+            "command": "new_php_class",
+            "args": {
+                "paths": []
+            }
+        }, {
+            "caption": "Rename PHP class...",
+            "command": "rename_php_class",
+            "args": {
+                "paths": []
+            }
+        }]
 	}
 ]

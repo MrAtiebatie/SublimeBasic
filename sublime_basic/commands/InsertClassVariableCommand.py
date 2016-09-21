@@ -11,10 +11,7 @@ class InsertClassVariableCommand(sublime_plugin.TextCommand):
     comment   = '';
 
     def run(self, edit):
-        self.view.window().show_input_panel('Variable visiblity:', '', self.visiblity_output, None, None)
-
-    def visiblity_output(self, visiblity):
-        self.visiblity = visiblity
+        self.visiblity = "public"
         self.view.window().show_input_panel('Variable data type:', '', self.type_output, None, None)
 
     def type_output(self, data_type):
