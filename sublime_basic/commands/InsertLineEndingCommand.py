@@ -34,8 +34,6 @@ class InsertLineEndingCommand(sublime_plugin.TextCommand):
 
                 character = self.choose_character(view, sel)
 
-                print(character)
-
                 # Don't add a semicolon if it's already there
                 if character in current_line:
                     if " ?>" in view.substr(line):
@@ -72,13 +70,17 @@ class InsertLineEndingCommand(sublime_plugin.TextCommand):
         line = view.full_line(sel)
         current_line = view.substr(line).strip()
 
-        if '{' in current_line:
+        scope = view.scope_name(sel.begin())
+
+        statements = ['keyword.control.php', 'meta.group']
+
+        if 'meta.function' in scope:
             return ''
-        elif 'if (' in current_line:
+        elif [s for s in statements if s in scope]:
             return ' {|}'
-        elif re.match('\$(.*?) = \[(.*?)];', current_line):
+        elif 'keyword.operator.assignment' in scope:
             return ';'
-        elif '=>' in current_line:
+        elif 'meta.array' in scope:
             return ','
         else:
             return ';'

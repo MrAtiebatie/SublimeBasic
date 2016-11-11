@@ -6,7 +6,7 @@ namespace ${NAMESPACE};
 /**
  * ${1/^([A-Z])|(?:([A-Z])(\w))/(?1$1:)(?2 \l$2$3:)/g}
  */
-class ${1:${CLASSNAME}} extends ${2:AnotherClass}
+class ${1:${CLASSNAME}} ${2:extends ${3:AnotherClass}}
 {
     ${0}
 }
