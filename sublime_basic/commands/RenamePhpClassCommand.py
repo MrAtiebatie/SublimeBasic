@@ -17,9 +17,14 @@ class RenamePhpClassCommand(sublime_plugin.TextCommand):
         if not self.file.endswith(".php"):
             return
 
-        self.view.window().show_input_panel("Rename", "", self.rename, None, None)
+        filename = self.file.split("/").pop().replace(".php", "")
+
+        self.view.window().show_input_panel("Rename", filename, self.rename, None, None)
 
     def rename(self, filename):
+        if filename is None:
+            return
+
         if not filename.endswith(".php"):
             filename = filename + ".php"
 
