@@ -28,7 +28,6 @@ class InsertClassVariableCommand(sublime_plugin.TextCommand):
 
 class InsertVariableCommand(sublime_plugin.TextCommand):
     def run(self, edit, visiblity, data_type, comment):
-        print(visiblity)
         view = self.view
         sel = view.sel()
 
@@ -43,7 +42,10 @@ class InsertVariableCommand(sublime_plugin.TextCommand):
             selection = '$' + selection
 
         view.insert(edit, self.rowcol(row+2), indentation + '/**\n')
-        view.insert(edit, self.rowcol(row+3), indentation + ' * ' + comment + '\n')
+
+        if comment != None:
+            view.insert(edit, self.rowcol(row+3), indentation + ' * ' + comment + '\n')
+
         view.insert(edit, self.rowcol(row+4), indentation + ' * @var ' + data_type + ' ' + selection + '\n')
         view.insert(edit, self.rowcol(row+5), indentation + ' */ \n')
         view.insert(edit, self.rowcol(row+6), indentation + visiblity + ' ' + selection + ';\n\n')
