@@ -8,7 +8,6 @@ import sublime_plugin
 class InsertLineEndingCommand(sublime_plugin.TextCommand):
     def run(self, edit):
         settings = sublime.load_settings("SublimeBasic.sublime-settings")
-        print(settings)
         view = self.view
 
         # Accepted langs
@@ -66,22 +65,37 @@ class InsertLineEndingCommand(sublime_plugin.TextCommand):
 
 
     def choose_character(self, view, sel):
-        # Current line
-        line = view.full_line(sel)
-        current_line = view.substr(line).strip()
+        """Choose the ending character."""
 
-        scope = view.scope_name(sel.begin())
+        scope_bfr  = []
+        row, col   = view.rowcol(sel.begin())
+        text_point = view.text_point(row, 0)
 
-        statements = ['keyword.control.php', 'meta.group']
+        # print(view.substr(view.line(text_point)))
 
-        if 'meta.function' in scope:
-            return ''
+        for col in range(text_point, sel.end()):
+            scopes = view.scope_name(col).split(' ')
+            for scope in scopes:
+                if scope not in scope_bfr:
+                    scope_bfr.append(scope)
+
+        scope = list(filter(None, scope_bfr))
+
+        # print(scope)
+
+        statements = ['keyword.control.php meta.group.php', 'storage.type.function.php']
+        lists = ['meta.object-literal.key.js', 'meta.array.php', 'meta.group.php keyword.operator.key.php']
+
+        if 'keyword.operator.assignment' in scope:
+            return ';'
+        elif 'function-call' in scope:
+            return ';'
+        elif [l for l in lists if l in scope]:
+            return ','
         elif [s for s in statements if s in scope]:
             return ' {|}'
-        elif 'keyword.operator.assignment' in scope:
+        elif 'meta.block' in scope:
             return ';'
-        elif 'meta.array' in scope:
-            return ','
         else:
             return ';'
 
