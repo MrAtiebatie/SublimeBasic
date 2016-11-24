@@ -24,13 +24,12 @@ class InsertFileTemplateCommand(sublime_plugin.TextCommand):
 
         if namespaces:
             for namespace, folder in namespaces.items():
-                namespace = namespace.replace('\\', '')
-                filename = filename.replace(folder, namespace)
+                dirname = os.path.dirname(filename)
+                if folder.rstrip("/") == dirname:
+                    # Now extract the namespace and classname
+                    namespace = dirname.replace(folder, namespace).rstrip("\\")
+                    classname = os.path.basename(filename).replace('.php', '')
 
-                # Now extract the namespace and classname
-                namespace = os.path.dirname(filename).replace('/', '\\')
-                classname = os.path.basename(filename).replace('.php', '')
-
-                xml = ElementTree.parse(template)
-                snippet = xml.getroot().find('content').text
-                sublime.active_window().run_command('insert_snippet', dict(contents=snippet, NAMESPACE=namespace, CLASSNAME=classname))
+                    xml = ElementTree.parse(template)
+                    snippet = xml.getroot().find('content').text
+                    sublime.active_window().run_command('insert_snippet', dict(contents=snippet, NAMESPACE=namespace, CLASSNAME=classname))
