@@ -33,7 +33,7 @@ class InsertLineEndingCommand(sublime_plugin.TextCommand):
 
                 character = self.choose_character(view, sel)
 
-                # Don't add a semicolon if it's already there
+                # Don't add a character if it's already there
                 if character in current_line:
                     if " ?>" in view.substr(line):
                         tag = view.substr(line).index(" ?>")
@@ -42,7 +42,7 @@ class InsertLineEndingCommand(sublime_plugin.TextCommand):
                         pos = line.end()
                 else:
                     if " ?>" in view.substr(line):
-                        # Calculate php end tag index and insert semicolon
+                        # Calculate php end tag index and insert character
                         tag = view.substr(line).index(" ?>")
                         pos = view.line(sel.begin()).a + tag
                         self.view.insert(edit, pos, character.replace('|', ''))
@@ -70,10 +70,9 @@ class InsertLineEndingCommand(sublime_plugin.TextCommand):
         scope_bfr  = []
         row, col   = view.rowcol(sel.begin())
         text_point = view.text_point(row, 0)
+        line       = view.line(sel.end())
 
-        # print(view.substr(view.line(text_point)))
-
-        for col in range(text_point, sel.end()):
+        for col in range(text_point, line.end()):
             scopes = view.scope_name(col).split(' ')
             for scope in scopes:
                 if scope not in scope_bfr:
@@ -83,21 +82,20 @@ class InsertLineEndingCommand(sublime_plugin.TextCommand):
 
         # print(scope)
 
-        statements = ['keyword.control.php meta.group.php', 'storage.type.function.php']
-        lists = ['meta.object-literal.key.js', 'meta.array.php', 'meta.group.php keyword.operator.key.php']
+        types = {
+            ',': [['meta.object-literal.key.js'], ['meta.array.php'], ['meta.group.php', 'keyword.operator.key.php']],
+            ' {|}': [['keyword.control.php', 'meta.group.php'], ['storage.type.function.php']],
+            ';': [['keyword.operator.assignment'], ['function-call'], ['meta.block'], ['punctuation.section.array.end.php']],
+        }
 
-        if 'keyword.operator.assignment' in scope:
-            return ';'
-        elif 'function-call' in scope:
-            return ';'
-        elif [l for l in lists if l in scope]:
-            return ','
-        elif [s for s in statements if s in scope]:
-            return ' {|}'
-        elif 'meta.block' in scope:
-            return ';'
-        else:
-            return ';'
+        print(scope)
+
+        for key, type in types.items():
+            for keywords in type:
+                if all(x in scope for x in keywords):
+                    return key
+
+        return ';'
 
 
     def determine_cursor_position(self, text):
