@@ -33,6 +33,7 @@ class InsertLineEndingCommand(sublime_plugin.TextCommand):
 
                 character = self.choose_character(view, sel)
 
+
                 # Don't add a character if it's already there
                 if character in current_line:
                     if " ?>" in view.substr(line):
@@ -78,21 +79,33 @@ class InsertLineEndingCommand(sublime_plugin.TextCommand):
                 if scope not in scope_bfr:
                     scope_bfr.append(scope)
 
+        # Remove None elements
         scope = list(filter(None, scope_bfr))
-
-        # print(scope)
+        scope = " ".join(scope)
 
         types = {
-            ',': [['meta.object-literal.key.js'], ['meta.array.php'], ['meta.group.php', 'keyword.operator.key.php']],
-            ' {|}': [['keyword.control.php', 'meta.group.php'], ['storage.type.function.php']],
+            ',': [['meta.object-literal.key.js'], ['meta.array.php', 'meta.group.php', 'keyword.operator.key.php', '!punctuation.section.group.end.php']],
+            ' {|}': [['keyword.control.php meta.group.php punctuation.section.group.begin.php'], ['storage.type.function.php']],
             ';': [['keyword.operator.assignment'], ['function-call'], ['meta.block'], ['punctuation.section.array.end.php']],
         }
 
-        print(scope)
+        # for key, type in types.items():
+        #     for keywords in type:
+        #         if all(x in scope for x in keywords):
+        #             return key
 
         for key, type in types.items():
             for keywords in type:
-                if all(x in scope for x in keywords):
+                conditions = []
+
+                # Compare the scope against the keywords
+                for keyword in keywords:
+                    if ("!" in keyword and keyword[1:] not in scope):
+                        conditions.append(keyword)
+                    elif keyword in scope:
+                        conditions.append(keyword)
+
+                if len(conditions) == len(keywords):
                     return key
 
         return ';'
