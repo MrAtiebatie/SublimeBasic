@@ -25,7 +25,8 @@ class InsertFileTemplateCommand(sublime_plugin.TextCommand):
         if namespaces:
             for namespace, folder in namespaces.items():
                 dirname = os.path.dirname(filename)
-                if folder.rstrip("/") == dirname:
+                print(folder, dirname)
+                if dirname.startswith(folder):
                     # Now extract the namespace and classname
                     namespace = dirname.replace(folder, namespace).rstrip("\\")
                     classname = os.path.basename(filename).replace('.php', '')
