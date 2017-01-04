@@ -1,9 +1,9 @@
 import re
 import sublime
 import sublime_plugin
+from ..utils import Utils
 import ctagsplugin as ctags
 from subprocess import Popen, PIPE
-from ..utils import Utils
 
 #--------------------------------------------------------
 # Import namespace
@@ -18,6 +18,8 @@ class ImportNamespaceCommand(sublime_plugin.TextCommand):
             symbol = view.substr(view.word(sel.begin()))
 
             result = ctags.JumpToDefinition.run(symbol, None, "", [], view, tags_file)
+
+            # If result is more than one
 
             filename  = result[0][0].filename
             classname = result[0][0].symbol

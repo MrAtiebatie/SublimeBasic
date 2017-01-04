@@ -2,6 +2,7 @@ import re
 import sublime
 import sublime_plugin
 from ..utils import Utils
+import ctagsplugin as ctags
 
 #--------------------------------------------------------
 # Implement Interface Plugin
@@ -17,11 +18,27 @@ class ImplementInterfaceCommand(sublime_plugin.TextCommand):
         edit = edit
         view = self.view
         window = sublime.active_window()
+        self.interfaces = []
 
-        self.content = Utils().get_full_view(view)
-        self.interfaces = self.get_interface(self.content)
+        content = Utils().get_full_view(view)
+        tags_file = ctags.find_tags_relative_to(
+            view.file_name(), ctags.setting('tag_file'))
 
-        print(self.interfaces)
+        # Target scope
+        inheriteds = view.find_by_selector("entity.other.inherited-class.php")
+        implements = view.find_by_selector("storage.modifier.implements.php")
+        aliasses   = view.find_by_selector("keyword.other.use-as.php")
+
+        for entity in inheriteds:
+            scope = view.scope_name(entity.begin())
+            if not "meta.use.php" in scope:
+                # Filter the parent class
+                if entity.end() > implements[0].begin():
+                    interface = view.substr(entity)
+
+                    namespace = self.get_interface_namespace(content, interface)
+                    print(namespace)
+                    self.interfaces.append([interface, (namespace or "")])
 
         window.show_quick_panel(self.interfaces, self.choose_interface)
 
@@ -32,6 +49,7 @@ class ImplementInterfaceCommand(sublime_plugin.TextCommand):
 
         window = sublime.active_window()
         interface = self.interfaces[item]
+        print(interface)
 
         self.files = window.lookup_symbol_in_index(interface)
         self.files = [item[1] for item in self.files]
@@ -68,26 +86,13 @@ class ImplementInterfaceCommand(sublime_plugin.TextCommand):
     def get_class_name(self, content):
         return re.findall('class ([a-zA-Z]+)', content, re.MULTILINE)
 
-    # Find interface
-    def get_interface(self, content):
-        matches = re.findall('implements([\s\w,]+)', content, re.MULTILINE)
-        interfaces = []
-
-        if len(matches) > 0:
-            for match in matches[0].split(','):
-                interfaces.append(match.strip())
-
-                return interfaces
-            else:
-                return None
-
     # Get interface namespace
     def get_interface_namespace(self, content, interface):
-        regex = r'use ([a-zA-Z\\]+(' + interface + '));'
+        regex = r'use ([a-zA-Z\\]+)[\sas\s?]+' + interface + ';'
         matches = re.findall(regex, content)
 
         if len(matches) > 0:
-            return matches[0][0]
+            return matches[0]
         else:
             return None
 
