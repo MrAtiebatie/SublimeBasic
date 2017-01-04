@@ -37,7 +37,6 @@ class ImplementInterfaceCommand(sublime_plugin.TextCommand):
                     interface = view.substr(entity)
 
                     namespace = self.get_interface_namespace(content, interface)
-                    print(namespace)
                     self.interfaces.append([interface, (namespace or "")])
 
         window.show_quick_panel(self.interfaces, self.choose_interface)
@@ -49,7 +48,6 @@ class ImplementInterfaceCommand(sublime_plugin.TextCommand):
 
         window = sublime.active_window()
         interface = self.interfaces[item]
-        print(interface)
 
         self.files = window.lookup_symbol_in_index(interface)
         self.files = [item[1] for item in self.files]

@@ -1,6 +1,3 @@
-import sys
-import imp
-import sublime_plugin
 from .sublime_basic.commands.ImplementInterfaceCommand import ImplementInterfaceCommand
 from .sublime_basic.commands.InsertClassVariableCommand import InsertClassVariableCommand
 from .sublime_basic.commands.InsertClassVariableCommand import InsertVariableCommand

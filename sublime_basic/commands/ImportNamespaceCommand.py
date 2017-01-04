@@ -1,8 +1,8 @@
 import re
 import sublime
 import sublime_plugin
-from ..utils import Utils
 import ctagsplugin as ctags
+from ..utils import Utils
 from subprocess import Popen, PIPE
 
 #--------------------------------------------------------
@@ -11,6 +11,11 @@ from subprocess import Popen, PIPE
 class ImportNamespaceCommand(sublime_plugin.TextCommand):
     def run(self, edit):
         view = self.view
+
+        if not "find_tags_relative_to" in dir(ctags):
+            sublime.error_message("CTags methods not available. Please install SublimeText/CTags")
+            return
+
         tags_file = ctags.find_tags_relative_to(
             view.file_name(), ctags.setting('tag_file'))
 
@@ -19,7 +24,7 @@ class ImportNamespaceCommand(sublime_plugin.TextCommand):
 
             result = ctags.JumpToDefinition.run(symbol, None, "", [], view, tags_file)
 
-            # If result is more than one
+            # @todo If result is more than one
 
             filename  = result[0][0].filename
             classname = result[0][0].symbol
@@ -39,6 +44,14 @@ class ImportNamespaceCommand(sublime_plugin.TextCommand):
                 region = region.cover(r)
 
             self.view.replace(edit, region, self.build_uses())
+            sublime.status_message('Successfully imported ' + self.namespace)
+        else:
+            region = self.view.find_by_selector("keyword.other.namespace.php")
+
+            row, col = self.view.rowcol(region[0].begin())
+            region   = self.view.text_point(row + 2, col)
+
+            self.view.insert(edit, region, self.build_uses() + "\n\n")
             sublime.status_message('Successfully imported ' + self.namespace)
 
     def build_uses(self):

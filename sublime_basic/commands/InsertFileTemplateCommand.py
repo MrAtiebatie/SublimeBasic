@@ -25,7 +25,6 @@ class InsertFileTemplateCommand(sublime_plugin.TextCommand):
         if namespaces:
             for namespace, folder in namespaces.items():
                 dirname = os.path.dirname(filename)
-                print(folder, dirname)
                 if dirname.startswith(folder):
                     # Now extract the namespace and classname
                     namespace = dirname.replace(folder, namespace).rstrip("\\")
