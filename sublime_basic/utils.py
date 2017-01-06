@@ -7,7 +7,7 @@ import json
 class Utils:
 
     # Get project path
-    def project_path(self):
+    def project_path():
         folders = sublime.active_window().folders()
 
         if (len(folders) > 0):
@@ -19,11 +19,11 @@ class Utils:
         return folder
 
     # Return Sublime Text packages path
-    def packages_path(self):
+    def packages_path():
         return sublime.packages_path() + '/'
 
     # Return Sublime Basic package path
-    def package_path(self):
+    def package_path():
         return sublime.packages_path() + '/SublimeBasic/'
 
     # Get namespaces from composer.json
@@ -57,3 +57,12 @@ class Utils:
 
         with open(filename) as line:
             return line.read()
+
+    def settings(key, default, filename=None):
+        """ Get a setting key """
+        if filename != None:
+            settings = sublime.load_settings(filename)
+        else:
+            settings = sublime.load_settings("SublimeBasic.sublime-settings")
+
+        return settings.get(key, default)

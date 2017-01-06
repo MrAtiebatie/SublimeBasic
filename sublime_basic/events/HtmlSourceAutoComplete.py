@@ -14,20 +14,24 @@ class HtmlSourceAutoComplete(sublime_plugin.EventListener):
         if not any(x in scope for x in scopes):
             return
 
-        project = Utils().project_path()
+        project = Utils.project_path()
 
         for sel in view.sel():
             line = view.line(sel.end())
-            line = view.substr(line)
+            line = view.substr(line).strip()
 
-            if line.strip().startswith('<script'):
-                regex = re.compile('src=["\']?((?:.(?!["\']?\s+(?:\S+)=|[>"\']))+.)["\']?')
-            elif line.strip().startswith('<link'):
-                regex = re.compile('href=["\']?((?:.(?!["\']?\s+(?:\S+)=|[>"\']))+.)["\']?')
+            row, col  = view.rowcol(sel.begin())
+            attribute = view.substr(view.word(view.text_point(row, col - 4)))
+
+            regex = ""
+            if attribute == "src":
+                regex = re.compile('.*?src=["\']?((?:.(?!["\']?\s+(?:\S+)=|[>"\']))+.)["\']?')
+            elif attribute == "href":
+                regex = re.compile('.*?href=["\']?((?:.(?!["\']?\s+(?:\S+)=|[>"\']))+.)["\']?')
 
             search = re.search(regex, line)
 
-            if search:
+            if search.lastindex != None:
                 match = search.group(1).split('/')
                 prefix = match.pop()
 
