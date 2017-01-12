@@ -1,6 +1,7 @@
 import sublime
 import sublime_plugin
 import os
+import difflib
 from xml.etree import ElementTree
 from ..utils import Utils
 
@@ -17,20 +18,25 @@ class InsertFileTemplateCommand(sublime_plugin.TextCommand):
         folders = window.folders()
         filename = view.file_name()
         if (len(folders) > 0):
-            folder = folders[0] + '/'
-            filename = filename.replace(folder, '')
+            folder = folders[0] + "/"
+            filename = filename.replace(folder, "")
 
         namespaces = Utils().get_psr4_namespaces()
 
         if namespaces:
-            for namespace, folder in namespaces.items():
-                dirname = os.path.dirname(filename)
-                print(folder, dirname)
-                if dirname.startswith(folder):
-                    # Now extract the namespace and classname
-                    namespace = dirname.replace(folder, namespace).rstrip("\\")
-                    classname = os.path.basename(filename).replace('.php', '')
+            # for namespace, folder in namespaces.items():
+            current = os.path.dirname(filename)
 
-                    xml = ElementTree.parse(template)
-                    snippet = xml.getroot().find('content').text
-                    sublime.active_window().run_command('insert_snippet', dict(contents=snippet, NAMESPACE=namespace, CLASSNAME=classname))
+            folders = namespaces.values()
+            psrfolder = difflib.get_close_matches(current, folders)
+            namespace = [k for k, v in namespaces.items() if v == psrfolder[0]]
+
+            # Now extract the namespace and classname
+            if namespace != None:
+                namespace = namespace[0] + current.replace(psrfolder[0], "").replace("/", "")
+                classname = os.path.basename(filename).replace(".php", "")
+
+                xml = ElementTree.parse(template)
+                snippet = xml.getroot().find("content").text
+                sublime.active_window().run_command("insert_snippet", dict(contents=snippet, NAMESPACE=namespace, CLASSNAME=classname))
+                sublime.active_window().run_command("save")

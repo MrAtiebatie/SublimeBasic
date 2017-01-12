@@ -45,3 +45,6 @@ class RenamePhpClassCommand(sublime_plugin.TextCommand):
 
         for line in fileinput.FileInput(new_file, inplace=True):
             print(line.replace(class_name, new_class_name), end='')
+
+        self.view.window().open_file(new_class_file)
+
