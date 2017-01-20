@@ -29,14 +29,19 @@ class InsertFileTemplateCommand(sublime_plugin.TextCommand):
 
             folders = namespaces.values()
             psrfolder = difflib.get_close_matches(current, folders)
-            namespace = [k for k, v in namespaces.items() if v == psrfolder[0]]
 
-            # Now extract the namespace and classname
-            if namespace != None:
-                namespace = namespace[0] + current.replace(psrfolder[0], "").replace("/", "")
-                classname = os.path.basename(filename).replace(".php", "")
+            if len(psrfolder) > 0:
+                namespace = [k for k, v in namespaces.items() if v == psrfolder[0]]
 
-                xml = ElementTree.parse(template)
-                snippet = xml.getroot().find("content").text
-                sublime.active_window().run_command("insert_snippet", dict(contents=snippet, NAMESPACE=namespace, CLASSNAME=classname))
-                sublime.active_window().run_command("save")
+                # Now extract the namespace and classname
+                if namespace != None:
+                    namespace = namespace[0] + current.replace(psrfolder[0], "").replace("/", "")
+            else:
+                namespace = ""
+
+            classname = os.path.basename(filename).replace(".php", "")
+            xml       = ElementTree.parse(template)
+            snippet   = xml.getroot().find("content").text
+
+            sublime.active_window().run_command("insert_snippet", dict(contents=snippet, NAMESPACE=namespace, CLASSNAME=classname))
+            sublime.active_window().run_command("save")

@@ -34,6 +34,6 @@ class NewPhpClassCommand(sublime_plugin.WindowCommand):
 
     def insert_template(self, view):
         if not view.is_loading():
-            view.run_command('insert_file_template', { 'template': Utils().package_path() + '/sublime_basic/templates/class.sublime-snippet' })
+            view.run_command('insert_file_template', { 'template': Utils.package_path() + '/sublime_basic/templates/class.sublime-snippet' })
         else:
             sublime.set_timeout(lambda: self.insert_template(view), 10)

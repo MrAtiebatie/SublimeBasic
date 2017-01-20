@@ -50,7 +50,7 @@ class Utils:
     # Get the contents of a given filename
     def file_get_contents(self, filename, relative=True):
         if relative:
-            filename = self.project_path() + filename
+            filename = Utils.project_path() + filename
 
         if (os.path.isfile(filename) != True):
             return False
