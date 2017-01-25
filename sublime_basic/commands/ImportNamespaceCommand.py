@@ -73,10 +73,10 @@ class ImportNamespaceCommand(sublime_plugin.TextCommand):
 
             # Find definition and filter the unnessecary keys
             results = ctags.JumpToDefinition.run(symbol, None, "", [], view, tags_file)
-            results = list(map(lambda x: [x.symbol, x.filename], results[0]))
 
             # If results is more than one
             if results != None:
+                results = list(map(lambda x: [x.symbol, x.filename], results[0]))
                 if len(results) > 1:
                     # Show selection panel
                     self.results = results
