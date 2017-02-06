@@ -5,51 +5,6 @@ import ctagsplugin as ctags
 from ..utils import Utils
 from subprocess import Popen, PIPE
 
-class InsertSjorsCommand(sublime_plugin.TextCommand):
-    def run(self, edit, item):
-        print("hoi")
-        print(item)
-        """ INSERT AND ORDER THE NAMESPACES """
-        classname = item[0]
-        filename  = item[1]
-
-        contents  = Utils().file_get_contents(filename)
-        namespace = re.findall('namespace ([^\s]+);', contents, re.MULTILINE)
-
-        if namespace:
-            namespace = namespace[0] + "\\" + classname
-        else:
-            namespace = classname
-
-        regions = self.view.find_all(r"^(use\s+.+[;])", 0)
-        if len(regions) > 0:
-            region = regions[0]
-            for r in regions:
-                region = region.cover(r)
-
-            self.view.replace(edit, region, self.build_uses(namespace))
-            sublime.status_message('Successfully imported ' + namespace)
-        else:
-            region = self.view.find_by_selector("keyword.other.namespace.php")
-
-            row, col = self.view.rowcol(region[0].begin())
-            region   = self.view.text_point(row + 2, col)
-
-            self.view.insert(edit, region, self.build_uses(namespace) + "\n\n")
-            sublime.status_message('Successfully imported ' + namespace)
-
-    def build_uses(self, namespace):
-        """ BUILD USE STATEMENTS """
-        uses = []
-        use_stmt = "use " + namespace + ";"
-
-        self.view.find_all(r"^(use\s+.+[;])", 0, '$1', uses)
-        uses.append(use_stmt)
-        uses = list(set(uses))
-        uses.sort(key = len)
-
-        return "\n".join(uses)
-
 #--------------------------------------------------------
 # Import namespace
 #--------------------------------------------------------
@@ -66,7 +21,7 @@ class ImportNamespaceCommand(sublime_plugin.TextCommand):
             return
 
         # Find tags file
-        tags_file = ctags.find_tags_relative_to(view.file_name(), ctags.setting('tag_file'))
+        tags_file = ctags.find_tags_relative_to(view.file_name(), ctags.setting("tag_file"))
 
         for sel in view.sel():
             symbol = view.substr(view.word(sel.begin()))
@@ -92,4 +47,47 @@ class ImportNamespaceCommand(sublime_plugin.TextCommand):
             return
 
         result = self.results[index]
-        sublime.active_window().run_command("insert_sjors", { "item": result[0] })
+        sublime.active_window().run_command("insert_namespace", { "item": result })
+
+class InsertNamespaceCommand(sublime_plugin.TextCommand):
+    def run(self, edit, item):
+        """ INSERT AND ORDER THE NAMESPACES """
+        classname = item[0]
+        filename  = item[1]
+
+        contents  = Utils().file_get_contents(filename)
+        namespace = re.findall("namespace ([^\s]+);", contents, re.MULTILINE)
+
+        if namespace:
+            namespace = namespace[0] + "\\" + classname
+        else:
+            namespace = classname
+
+        regions = self.view.find_all(r"^(use\s+.+[;])", 0)
+        if len(regions) > 0:
+            region = regions[0]
+            for r in regions:
+                region = region.cover(r)
+
+            self.view.replace(edit, region, self.build_uses(namespace))
+            sublime.status_message("Successfully imported " + namespace)
+        else:
+            region = self.view.find_by_selector("keyword.other.namespace.php")
+
+            row, col = self.view.rowcol(region[0].begin())
+            region   = self.view.text_point(row + 2, col)
+
+            self.view.insert(edit, region, self.build_uses(namespace) + "\n\n")
+            sublime.status_message("Successfully imported " + namespace)
+
+    def build_uses(self, namespace):
+        """ BUILD USE STATEMENTS """
+        uses = []
+        use_stmt = "use " + namespace + ";"
+
+        self.view.find_all(r"^(use\s+.+[;])", 0, "$1", uses)
+        uses.append(use_stmt)
+        uses = list(set(uses))
+        uses.sort(key = len)
+
+        return "\n".join(uses)
