@@ -37,7 +37,7 @@ class ImportNamespaceCommand(sublime_plugin.TextCommand):
                     self.results = results
                     sublime.active_window().show_quick_panel(results, self.on_done)
                 else:
-                    sublime.active_window().run_command("insert_namespace", { "item": results[0][0] })
+                    sublime.active_window().run_command("insert_namespace", { "item": results[0] })
             else:
                 sublime.status_message("No definitions found for " + symbol)
 
