@@ -33,9 +33,8 @@ class InsertLineEndingCommand(sublime_plugin.TextCommand):
 
                 character = self.choose_character(view, sel)
 
-
                 # Don't add a character if it's already there
-                if character in current_line:
+                if current_line.strip().endswith(character.strip()[0]):
                     if " ?>" in view.substr(line):
                         tag = view.substr(line).index(" ?>")
                         pos = view.line(sel.begin()).a + tag
@@ -84,15 +83,12 @@ class InsertLineEndingCommand(sublime_plugin.TextCommand):
         scope = " ".join(scope)
 
         types = {
-            ',': [['meta.object-literal.key.js'], ['meta.array.php', 'meta.group.php', 'keyword.operator.key.php', '!punctuation.section.group.end.php']],
-            ' {|}': [['keyword.control.php meta.group.php punctuation.section.group.begin.php'], ['storage.type.function.php']],
-            ';': [['keyword.operator.assignment'], ['function-call'], ['meta.block'], ['punctuation.section.array.end.php']],
+            ';': [['keyword.operator.assignment'], ['!keyword.control', '!punctuation.separator.key-value.js', 'function-call'], ['punctuation.section.array.end']],
+            ',': [['meta.object-literal.key'], ['meta.array', 'meta.group', 'keyword.operator.key', '!punctuation.section.group.end'], ['meta.array', 'keyword.operator.key'], ['punctuation.separator.key-value.js']],
+            ' {|}': [['keyword.control meta.group punctuation.section.group.begin'], ['storage.type.function'], ['keyword.control.php'], ['keyword.control.conditional'], ['keyword.control.loop']],
         }
 
-        # for key, type in types.items():
-        #     for keywords in type:
-        #         if all(x in scope for x in keywords):
-        #             return key
+        print(scope)
 
         for key, type in types.items():
             for keywords in type:
