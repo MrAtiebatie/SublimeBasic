@@ -16,10 +16,6 @@ class InsertClassVariableCommand(sublime_plugin.TextCommand):
 
     def type_output(self, data_type):
         self.data_type = data_type
-        self.view.window().show_input_panel('Comment for variable:', '', self.comment_output, None, None)
-
-    def comment_output(self, comment):
-        self.comment = comment
         self.view.run_command('insert_variable', {
             'visiblity': self.visiblity,
             'data_type': self.data_type,
@@ -43,8 +39,8 @@ class InsertVariableCommand(sublime_plugin.TextCommand):
 
         view.insert(edit, self.rowcol(row+2), indentation + '/**\n')
 
-        if comment != None:
-            view.insert(edit, self.rowcol(row+3), indentation + ' * ' + comment + '\n')
+        # if comment != None:
+        #     view.insert(edit, self.rowcol(row+3), indentation + ' * ' + comment + '\n')
 
         view.insert(edit, self.rowcol(row+4), indentation + ' * @var ' + data_type + ' ' + selection + '\n')
         view.insert(edit, self.rowcol(row+5), indentation + ' */ \n')
