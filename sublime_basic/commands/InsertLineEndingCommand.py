@@ -83,7 +83,7 @@ class InsertLineEndingCommand(sublime_plugin.TextCommand):
         scope = " ".join(scope)
 
         types = {
-            ';': [['keyword.operator.assignment'], ['!keyword.control', '!punctuation.separator.key-value.js', 'function-call'], ['punctuation.section.array.end']],
+            ';': [['keyword.operator.assignment'], ['!keyword.control', '!punctuation.separator.key-value.js', 'function-call'], ['punctuation.section.array.end'], ['keyword.control', '!punctuation.section.group.begin.php']],
             ',': [['meta.object-literal.key'], ['meta.array', 'meta.group', 'keyword.operator.key', '!punctuation.section.group.end'], ['meta.array', 'keyword.operator.key'], ['punctuation.separator.key-value.js']],
             ' {|}': [['keyword.control meta.group punctuation.section.group.begin'], ['storage.type.function'], ['keyword.control.conditional'], ['keyword.control.loop']],
         }
