@@ -10,5 +10,6 @@ from .sublime_basic.commands.ImportNamespaceCommand import InsertNamespaceComman
 from .sublime_basic.commands.NewPhpClassCommand import NewPhpClassCommand
 from .sublime_basic.commands.RenamePhpClassCommand import RenamePhpClassCommand
 from .sublime_basic.commands.NavigateInProjectCommand import NavigateInProjectCommand
+from .sublime_basic.commands.SelectAllClasses import SelectAllClasses
 from .sublime_basic.events.HtmlSourceAutoComplete import HtmlSourceAutoComplete
 from .sublime_basic.events.SaveTagsToFile import SaveTagsToFile
