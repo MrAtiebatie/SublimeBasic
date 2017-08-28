@@ -1,0 +1,23 @@
+<snippet>
+	<content><![CDATA[<?php
+
+namespace ${NAMESPACE};
+
+use Tests\TestCase;
+use Tests\DatabaseSetup;
+
+/**
+ * ${1/^([A-Z])|(?:([A-Z])(\w))/(?1$1:)(?2 \l$2$3:)/g}
+ */
+class ${1:${CLASSNAME/^([a-zA-Z]+)Test/($1)/g}}Test ${2:extends TestCase}
+{
+    use DatabaseSetup;
+
+    ${0}
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<!-- <tabTrigger>hello</tabTrigger> -->
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>
