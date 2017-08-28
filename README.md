@@ -15,3 +15,4 @@ A set of plugins for making (PHP) development easier in Sublime Text
 - Refactor ImportNamespaceCommand for multiple quick panel windows
 - Add New Trait option
 - Add New Interface option
+- Wrap code in function feature
