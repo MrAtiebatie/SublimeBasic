@@ -4,12 +4,13 @@ import os
 from ..utils import Utils
 
 #--------------------------------------------------------
-# New PHP class
+# New PHP file
 #--------------------------------------------------------
-class NewPhpClassCommand(sublime_plugin.WindowCommand):
+class NewPhpFileCommand(sublime_plugin.WindowCommand):
 
-    def run(self, paths = []):
+    def run(self, file, paths = []):
         self._paths = paths
+        self._file = file
         window = sublime.active_window()
         view = window.active_view()
 
@@ -34,6 +35,6 @@ class NewPhpClassCommand(sublime_plugin.WindowCommand):
 
     def insert_template(self, view):
         if not view.is_loading():
-            view.run_command('insert_file_template', { 'template': Utils.package_path() + '/sublime_basic/templates/class.sublime-snippet' })
+            view.run_command('insert_file_template', { 'template': Utils.package_path() + '/sublime_basic/templates/' + self._file })
         else:
             sublime.set_timeout(lambda: self.insert_template(view), 10)

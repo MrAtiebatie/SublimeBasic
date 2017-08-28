@@ -7,7 +7,7 @@ from .sublime_basic.commands.InsertFileTemplateCommand import InsertFileTemplate
 from .sublime_basic.commands.InsertLineEndingCommand import InsertLineEndingCommand
 from .sublime_basic.commands.ImportNamespaceCommand import ImportNamespaceCommand
 from .sublime_basic.commands.ImportNamespaceCommand import InsertNamespaceCommand
-from .sublime_basic.commands.NewPhpClassCommand import NewPhpClassCommand
+from .sublime_basic.commands.NewPhpFileCommand import NewPhpFileCommand
 from .sublime_basic.commands.RenamePhpClassCommand import RenamePhpClassCommand
 from .sublime_basic.commands.NavigateInProjectCommand import NavigateInProjectCommand
 from .sublime_basic.commands.SelectAllClasses import SelectAllClasses
