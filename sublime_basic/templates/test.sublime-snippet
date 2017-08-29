@@ -3,13 +3,13 @@
 
 namespace ${NAMESPACE};
 
-use Tests\TestCase;
+use Tests\\${3}TestCase;
 use Tests\DatabaseSetup;
 
 /**
  * ${1/^([A-Z])|(?:([A-Z])(\w))/(?1$1:)(?2 \l$2$3:)/g}
  */
-class ${1:${CLASSNAME/^([a-zA-Z]+)Test/($1)/g}}Test ${2:extends TestCase}
+class ${1:${CLASSNAME/^([a-zA-Z]+)Test/($1)/g}}Test ${2:extends ${3:Dusk}TestCase}
 {
     use DatabaseSetup;
 

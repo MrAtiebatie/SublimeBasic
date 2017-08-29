@@ -7,7 +7,7 @@
         "caption": "PHP",
         "children": [{
             "caption": "New PHP class...",
-            "command": "new_php_class",
+            "command": "new_php_file",
             "args": {
                 "file": "class.sublime-snippet",
                 "paths": []
