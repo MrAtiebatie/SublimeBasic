@@ -8,6 +8,8 @@ class SelectAllClasses(sublime_plugin.TextCommand):
     def run(self, edit):
         view = self.view
 
+        print("HOI SJORS")
+
         view.sel().clear()
 
         view.sel().add_all(view.find_by_selector('support.class.php'))

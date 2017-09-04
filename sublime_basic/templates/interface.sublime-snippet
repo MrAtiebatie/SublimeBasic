@@ -1,0 +1,18 @@
+<snippet>
+	<content><![CDATA[<?php
+
+namespace ${NAMESPACE};
+
+/**
+ * ${1/^([A-Z])|(?:([A-Z])(\w))/(?1$1:)(?2 \l$2$3:)/g}
+ */
+interface ${1:${CLASSNAME}}
+{
+    ${0}
+}
+]]></content>
+	<!-- Optional: Set a tabTrigger to define how to trigger the snippet -->
+	<!-- <tabTrigger>hello</tabTrigger> -->
+	<!-- Optional: Set a scope to limit where the snippet will trigger -->
+	<!-- <scope>source.python</scope> -->
+</snippet>

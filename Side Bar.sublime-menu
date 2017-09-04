@@ -5,28 +5,46 @@
     },
 	{
         "caption": "PHP",
-        "children": [{
-            "caption": "New PHP class...",
-            "command": "new_php_file",
-            "args": {
-                "file": "class.sublime-snippet",
-                "paths": []
-            }
-        },
-        {
-            "caption": "New Unit Test...",
-            "command": "new_php_file",
-            "args": {
-                "file": "test.sublime-snippet",
-                "paths": []
-            }
-        },
-        {
-            "caption": "Rename PHP class...",
-            "command": "rename_php_class",
-            "args": {
-                "paths": []
-            }
-        }]
+        "children": [
+            {
+                "caption": "New PHP class...",
+                "command": "new_php_file",
+                "args": {
+                    "file": "class.sublime-snippet",
+                    "paths": []
+                }
+            },
+            {
+                "caption": "Rename PHP class...",
+                "command": "rename_php_class",
+                "args": {
+                    "paths": []
+                }
+            },
+            {
+                "caption": "New Test...",
+                "command": "new_php_file",
+                "args": {
+                    "file": "test.sublime-snippet",
+                    "paths": []
+                }
+            },
+            {
+                "caption": "New Trait...",
+                "command": "new_php_file",
+                "args": {
+                    "file": "trait.sublime-snippet",
+                    "paths": []
+                }
+            },
+            {
+                "caption": "New Interface...",
+                "command": "new_php_file",
+                "args": {
+                    "file": "interface.sublime-snippet",
+                    "paths": []
+                }
+            },
+        ]
 	}
 ]
