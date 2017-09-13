@@ -17,7 +17,7 @@ class InsertFileTemplateCommand(sublime_plugin.TextCommand):
         # Path variables
         folders = window.folders()
         filename = view.file_name()
-        if (len(folders) > 0):
+        if len(folders) > 0:
             folder = folders[0] + "/"
             filename = filename.replace(folder, "")
 
@@ -30,14 +30,14 @@ class InsertFileTemplateCommand(sublime_plugin.TextCommand):
             folders = namespaces.values()
             psrfolder = difflib.get_close_matches(current, folders)
 
-            if len(psrfolder) > 0:
-                namespace = [k for k, v in namespaces.items() if v == psrfolder[0]]
+            namespace = ""
 
-                # Now extract the namespace and classname
-                if namespace != None:
-                    namespace = namespace[0] + current.replace(psrfolder[0], "").replace("/", "")
-            else:
-                namespace = ""
+            if any(folder for folder in folders if current.startswith(folder)):
+                directory = [folder for folder in folders if current.startswith(folder)]
+
+                for (key, value) in namespaces.items():
+                    if value == directory[0]:
+                        namespace = current.replace(value, key).replace("/", "\\")
 
             classname = os.path.basename(filename).replace(".php", "")
             xml       = ElementTree.parse(template)

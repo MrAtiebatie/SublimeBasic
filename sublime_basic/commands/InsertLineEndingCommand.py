@@ -88,8 +88,6 @@ class InsertLineEndingCommand(sublime_plugin.TextCommand):
             ' {|}': [['keyword.control.php meta.group'], ['keyword.control meta.group punctuation.section.group.begin'], ['storage.type.function'], ['keyword.control.conditional'], ['keyword.control.loop']],
         }
 
-        print(scope)
-
         for key, type in types.items():
             for keywords in type:
                 conditions = []

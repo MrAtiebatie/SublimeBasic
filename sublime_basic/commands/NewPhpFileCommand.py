@@ -23,6 +23,10 @@ class NewPhpFileCommand(sublime_plugin.WindowCommand):
         if filename.endswith('.php') != True:
             filename += '.php'
 
+        if self._file == 'test.sublime-snippet' and not filename.endswith('Test.php'):
+            filename = filename.replace('.php', 'Test.php')
+
+
         if os.path.isfile(filename):
             sublime.error_message('File already exists.')
             return
