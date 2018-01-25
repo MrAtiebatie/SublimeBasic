@@ -16,3 +16,4 @@ A set of plugins for making (PHP) development easier in Sublime Text
 
 - Refactor ImportNamespaceCommand for multiple quick panel windows
 - Check for unused namespaces
+- Check for classes that aren't imported yet

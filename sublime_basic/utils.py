@@ -6,7 +6,7 @@ import json
 
 class Utils:
 
-    # Get project path
+    """Get project path"""
     def project_path():
         folders = sublime.active_window().folders()
 
@@ -18,15 +18,15 @@ class Utils:
 
         return folder
 
-    # Return Sublime Text packages path
+    """Return Sublime Text packages path"""
     def packages_path():
         return sublime.packages_path() + '/'
 
-    # Return Sublime Basic package path
+    """Return Sublime Basic package path"""
     def package_path():
         return sublime.packages_path() + '/SublimeBasic/'
 
-    # Get namespaces from composer.json
+    """Get namespaces from composer.json"""
     def get_psr4_namespaces(self):
         content = self.file_get_contents('composer.json')
 
@@ -43,11 +43,11 @@ class Utils:
 
         return False
 
-    # Get view contents
+    """Get view contents"""
     def get_full_view(self, view):
         return view.substr(sublime.Region(0, view.size()))
 
-    # Get the contents of a given filename
+    """Get the contents of a given filename"""
     def file_get_contents(self, filename, relative=True):
         if relative:
             filename = Utils.project_path() + filename
@@ -58,8 +58,8 @@ class Utils:
         with open(filename) as line:
             return line.read()
 
+    """ Get a setting key """
     def settings(key, default, filename=None):
-        """ Get a setting key """
         if filename != None:
             settings = sublime.load_settings(filename)
         else:
