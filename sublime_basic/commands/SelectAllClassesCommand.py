@@ -4,7 +4,7 @@ import sublime_plugin
 #--------------------------------------------------------
 # Select All Classes Plugin
 #--------------------------------------------------------
-class SelectAllClasses(sublime_plugin.TextCommand):
+class SelectAllClassesCommand(sublime_plugin.TextCommand):
     def run(self, edit):
         view = self.view
 

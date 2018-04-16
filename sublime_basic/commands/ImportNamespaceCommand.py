@@ -70,7 +70,12 @@ class InsertNamespaceCommand(sublime_plugin.TextCommand):
         classname = item[0]
         filename  = item[1]
 
-        contents  = Utils().file_get_contents(filename)
+        contents = Utils().file_get_contents(filename)
+
+        if contents == False:
+            print("Could not find the contents of " + filename)
+            return
+
         namespace = re.findall("namespace ([^\s]+);", contents, re.MULTILINE)
 
         if namespace:

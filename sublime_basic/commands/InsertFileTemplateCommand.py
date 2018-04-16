@@ -24,7 +24,6 @@ class InsertFileTemplateCommand(sublime_plugin.TextCommand):
         namespaces = Utils().get_psr4_namespaces()
 
         if namespaces:
-            # for namespace, folder in namespaces.items():
             current = os.path.dirname(filename)
 
             folders = namespaces.values()

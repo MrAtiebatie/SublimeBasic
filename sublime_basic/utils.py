@@ -10,6 +10,8 @@ class Utils:
     def project_path():
         folders = sublime.active_window().folders()
 
+        folders = [folder for folder in folders if "Sublime Text" not in folder]
+
         if (len(folders) > 0):
             folder = folders[0]
 
@@ -30,7 +32,7 @@ class Utils:
     def get_psr4_namespaces(self):
         content = self.file_get_contents('composer.json')
 
-        if (content):
+        if content:
             content = json.loads(content)
 
             # Check if autoload key exists
@@ -52,7 +54,7 @@ class Utils:
         if relative:
             filename = Utils.project_path() + filename
 
-        if (os.path.isfile(filename) != True):
+        if os.path.isfile(filename) != True:
             return False
 
         with open(filename) as line:
