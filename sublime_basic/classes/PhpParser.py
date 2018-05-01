@@ -1,6 +1,7 @@
 import sublime
+from ..utils import Utils
 
-class PhpDependencies:
+class PhpParser:
 
     """Get imported class from a view"""
     def get_imported_classes(self, view):
@@ -10,7 +11,7 @@ class PhpDependencies:
     def get_dependencies(self, view):
 
         # Get all dependencies
-        classes = view.find_by_selector('support.class.php')
+        classes = view.find_by_selector('support.class.php') + view.find_by_selector('support.class.builtin.php')
         extensions = view.find_by_selector('meta.path.php entity.other.inherited-class.php')
 
         # List of dependencies
@@ -37,6 +38,7 @@ class PhpDependencies:
         return [region for region in regions1 if region not in regions2]
 
     """Check if dependencies are imported"""
+    # CheckNamespacesCommand
     def get_unimported(self, view, dependencies_r, imported_r):
         dependencies = list()
         imported = list()
@@ -49,10 +51,30 @@ class PhpDependencies:
         for entity in imported_r:
             imported.append(view.substr(entity))
 
-        # Calculate difference and get the regions
-        diff = [dep for dep in dependencies if dep in imported]
-        regions = [dep for dep in dependencies_r if view.substr(dep) not in diff]
+        # Generate the difference in imported classes and
+        # used classes and get the regions
+        unimported = [dep for dep in dependencies if dep not in imported]
+        unimported_regions = [dep for dep in dependencies_r if view.substr(dep) in unimported]
 
-        regions.reverse()
+        unimported_regions.reverse()
 
-        return regions
+        # Generate the unused classes that are
+        # imported at the top of the file
+        unused = [dep for dep in imported if dep not in dependencies]
+        unused_regions = [dep for dep in imported_r if view.substr(dep) in unused]
+
+        return unused_regions, unimported_regions
+
+    """Get namespace from file"""
+    def get_namespace_from_file(self, filename):
+        contents = Utils.file_get_contents(filename)
+
+        if contents == False:
+            raise Exception("Could not find the contents of " + filename)
+
+        namespace = re.findall("namespace ([^\s]+);", contents, re.MULTILINE)
+
+        if namespace:
+            namespace = namespace[0] + "\\" + classname
+        else:
+            namespace = classname

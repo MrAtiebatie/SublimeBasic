@@ -1,6 +1,8 @@
 import sublime
 import sublime_plugin
-from ..classes.PhpDependencies import PhpDependencies
+from ..classes.Project import Project
+from ..classes.PhpParser import PhpParser
+from ..utils import Utils
 
 #--------------------------------------------------------
 # Check namespaces
@@ -14,7 +16,7 @@ class CheckNamespacesCommand(sublime_plugin.TextCommand):
     """Constructor"""
     def run(self, edit):
         view = self.view
-        php = PhpDependencies()
+        php = PhpParser()
 
         dependencies = php.get_dependencies(view)
         imported = php.get_imported_classes(view)
@@ -23,9 +25,9 @@ class CheckNamespacesCommand(sublime_plugin.TextCommand):
         dependencies = list(map(lambda dep: php.include_namespace(view, dep), dependencies))
 
         # Compare the used classes vs the imported classes
-        unimported = php.get_unimported(view, dependencies, imported)
+        unused, unimported = php.get_unimported(view, dependencies, imported)
 
-        # Find their file
+        # Find their associated file
         unimported = self.lookup_unimported(unimported)
 
         # We separate the single occurrences from the multiple to show a quick panel
@@ -37,7 +39,6 @@ class CheckNamespacesCommand(sublime_plugin.TextCommand):
             self.insert_namespace_from_symbol(result[1], result[0])
 
         if len(multiple) > 0:
-            print(multiple[0])
             self.choose_from_occurrences(multiple[0])
 
     """Show quick panel"""
@@ -50,19 +51,30 @@ class CheckNamespacesCommand(sublime_plugin.TextCommand):
 
         sublime.active_window().show_quick_panel(occurences[0], self.on_done)
 
-    """Insert unimported"""
+    """Lookup unimported"""
     def lookup_unimported(self, unimported):
         results = []
 
         for entity in unimported:
             entity = self.view.substr(entity)
 
-            if "\\" not in entity:
-                result = self.find_existence(entity)
+            if not entity.startswith("\\"):
 
-                results.append([entity, result])
+                # Check if it's a relative dependency
+                if not self.is_relative_dependency(entity):
+                    result = self.find_existence(entity)
+
+                    results.append([entity, result])
 
         return results
+
+    """Is it a relative dependency?"""
+    def is_relative_dependency(self, entity):
+        current = Project.working_dir(True)
+        symbols = self.find_existence(entity)
+        designated = [sym for sym in symbols if current in sym]
+
+        return len(designated) > 0
 
     """Find existence"""
     def find_existence(self, entity):
@@ -78,13 +90,18 @@ class CheckNamespacesCommand(sublime_plugin.TextCommand):
 
     """On item selection"""
     def on_done(self, index):
-        if index > 0:
+        if index >= 0:
             self.insert_namespace_from_symbol(self.definitions[index], self.entity)
 
-            self.view.run_command('check_namespaces')
+            self.view.run_command("check_namespaces")
 
     """Remove project name from filename"""
     def remove_project_name(self, filename):
+        # For some reason Sublime Text only prepends the project
+        # folder name if it has more than 2 project folders
+        if len(sublime.active_window().folders()) == 1:
+            return filename
+
         filename = filename.split("/")
 
         filename.pop(0)
@@ -92,9 +109,13 @@ class CheckNamespacesCommand(sublime_plugin.TextCommand):
         return "/".join(filename)
 
     """Insert namespace from symbol"""
+    # PhpBuilder
     def insert_namespace_from_symbol(self, filename, entity):
         filename = self.remove_project_name(filename)
 
         sublime.active_window().run_command("insert_namespace", { "item": [entity, filename] })
 
         self.entity = None
+
+        if self.view.is_dirty():
+            sublime.active_window().run_command("save")

@@ -4,6 +4,5 @@
     { "keys": ["super+shift+i"], "command": "implement_interface" },
     { "keys": ["super+alt+a"], "command": "select_all_classes" },
     { "keys": ["super+m"], "command": "import_namespace" },
-    { "keys": ["ctrl+u"], "command": "prompt_wrap_text" },
-    { "keys": ["super+o"], "command": "check_namespaces" },
+    { "keys": ["ctrl+u"], "command": "prompt_wrap_text" }
 ]

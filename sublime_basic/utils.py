@@ -3,22 +3,9 @@ import sublime
 import os
 import re
 import json
+from .classes.Project import Project
 
 class Utils:
-
-    """Get project path"""
-    def project_path():
-        folders = sublime.active_window().folders()
-
-        folders = [folder for folder in folders if "Sublime Text" not in folder]
-
-        if (len(folders) > 0):
-            folder = folders[0]
-
-        if folder.endswith('/') != True:
-            folder += '/'
-
-        return folder
 
     """Return Sublime Text packages path"""
     def packages_path():
@@ -49,10 +36,24 @@ class Utils:
     def get_full_view(self, view):
         return view.substr(sublime.Region(0, view.size()))
 
+    """Print something"""
+    def print(*var):
+        print("\t")
+        print("\t")
+        print(var)
+        print("\t")
+        print("\t")
+
+    """Print regions to text"""
+    def print_regions(*regions):
+        for var in regions:
+            for region in var:
+                print(sublime.active_window().active_view().substr(region))
+
     """Get the contents of a given filename"""
-    def file_get_contents(self, filename, relative=True):
+    def file_get_contents(filename, relative=True):
         if relative:
-            filename = Utils.project_path() + filename
+            filename = Project.project_path() + filename
 
         if os.path.isfile(filename) != True:
             return False

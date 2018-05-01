@@ -4,6 +4,7 @@ import sublime_plugin
 import ctagsplugin as ctags
 from ..utils import Utils
 from subprocess import Popen, PIPE
+from ..classes.Project import Project
 
 #--------------------------------------------------------
 # Import namespace
@@ -70,7 +71,7 @@ class InsertNamespaceCommand(sublime_plugin.TextCommand):
         classname = item[0]
         filename  = item[1]
 
-        contents = Utils().file_get_contents(filename)
+        contents = Utils.file_get_contents(filename)
 
         if contents == False:
             print("Could not find the contents of " + filename)
