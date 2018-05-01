@@ -21,13 +21,17 @@ class PhpParser:
         # Grab imported classes to filter them
         imported = self.get_imported_classes(view)
 
-        return self.filter_duplicate_regions(dependencies, imported)
+        dependencies = self.filter_duplicate_regions(dependencies, imported)
+
+        # Include a possible namespace in the dependencies
+        return list(map(lambda dep: self.include_namespace(view, dep), dependencies))
 
     """Include namespace"""
     def include_namespace(self, view, region):
         extended = sublime.Region(region.a - 1, region.b)
         string = view.substr(extended)
 
+        # Loop until we find one of the characters in this list
         if string[0] in [" ", "(", "[", "{"]:
             return region
         else:

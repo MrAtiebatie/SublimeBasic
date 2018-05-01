@@ -16,16 +16,13 @@ class CheckNamespacesCommand(sublime_plugin.TextCommand):
     """Constructor"""
     def run(self, edit):
         view = self.view
-        php = PhpParser()
+        parser = PhpParser()
 
-        dependencies = php.get_dependencies(view)
-        imported = php.get_imported_classes(view)
-
-        # Include a possible namespace in the dependencies
-        dependencies = list(map(lambda dep: php.include_namespace(view, dep), dependencies))
+        dependencies = parser.get_dependencies(view)
+        imported = parser.get_imported_classes(view)
 
         # Compare the used classes vs the imported classes
-        unused, unimported = php.get_unimported(view, dependencies, imported)
+        unused, unimported = parser.get_unimported(view, dependencies, imported)
 
         # Find their associated file
         unimported = self.lookup_unimported(unimported)
@@ -77,6 +74,7 @@ class CheckNamespacesCommand(sublime_plugin.TextCommand):
         return len(designated) > 0
 
     """Find existence"""
+    # Index.py
     def find_existence(self, entity):
         symbols = sublime.active_window().lookup_symbol_in_index(entity)
         symbols = [entity for entity in symbols if ".php" in entity[0]]
@@ -96,6 +94,7 @@ class CheckNamespacesCommand(sublime_plugin.TextCommand):
             self.view.run_command("check_namespaces")
 
     """Remove project name from filename"""
+    # Index
     def remove_project_name(self, filename):
         # For some reason Sublime Text only prepends the project
         # folder name if it has more than 2 project folders
