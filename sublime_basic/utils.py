@@ -51,12 +51,12 @@ class Utils:
                 print(sublime.active_window().active_view().substr(region))
 
     """Get the contents of a given filename"""
-    def file_get_contents(filename, relative=True):
+    def file_get_contents(self, filename, relative=True):
         if relative:
             filename = Project.project_path() + filename
 
         if os.path.isfile(filename) != True:
-            return False
+            raise Exception("File does not exists")
 
         with open(filename) as line:
             return line.read()

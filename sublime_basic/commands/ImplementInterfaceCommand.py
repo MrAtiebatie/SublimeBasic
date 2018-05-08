@@ -62,7 +62,7 @@ class ImplementInterfaceCommand(sublime_plugin.TextCommand):
         file = self.files[file]
         view = sublime.active_window().active_view()
 
-        contract = Utils.file_get_contents(file)
+        contract = Utils().file_get_contents(file)
 
         class_methods = self.get_class_methods(self.content)
         contract_methods = self.get_interface_methods(contract)
