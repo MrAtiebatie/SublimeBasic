@@ -1,20 +1,21 @@
 import re
 import sublime
+import inspect
 from ..utils import Utils
 
 class PhpParser:
 
     """Get imported class from a view"""
     def get_imported_classes(self, view):
-        usages = view.find_by_selector("meta.use.php meta.path.php support.class.php")
-        aliases = view.find_by_selector("meta.use.php") # entity.name.class.php
+        regions = view.find_by_selector("meta.use.php")
+        usages = list()
 
-        usages = list(filter(lambda usage: len(self.covered(usage, aliases)) > 0, usages))
+        for region in regions:
+            usage = view.word(sublime.Region(region.b - 1, region.b))
+
+            usages.append(usage)
 
         return usages
-
-    def covered(self, usage, aliases):
-        return list(filter(lambda alias: alias.cover(usage), aliases))
 
     """Get used classes in code"""
     def get_dependencies(self, view):
@@ -28,8 +29,6 @@ class PhpParser:
         view.erase_regions("classes")
         view.erase_regions("extensions")
         view.erase_regions("imported")
-        # view.add_regions("classes", classes, "comment")
-        # view.add_regions("extensions", extensions, "string")
 
         # List of dependencies
         classes.reverse()
@@ -37,8 +36,6 @@ class PhpParser:
 
         # Grab imported classes to filter them
         imported = self.get_imported_classes(view)
-
-        # view.add_regions("imported", imported, "comment")
 
         dependencies = self.filter_duplicate_regions(dependencies, imported)
 
