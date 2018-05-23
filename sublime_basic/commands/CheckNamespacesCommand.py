@@ -17,6 +17,7 @@ class CheckNamespacesCommand(sublime_plugin.TextCommand):
 
     """Constructor"""
     def run(self, edit):
+        print(dir(self), dir(sublime))
         view = self.view
         self.parser = PhpParser()
         self.builder = PhpBuilder()
