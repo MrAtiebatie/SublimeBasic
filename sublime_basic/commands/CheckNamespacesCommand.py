@@ -17,7 +17,6 @@ class CheckNamespacesCommand(sublime_plugin.TextCommand):
 
     """Constructor"""
     def run(self, edit):
-        print(dir(self), dir(sublime))
         view = self.view
         self.parser = PhpParser()
         self.builder = PhpBuilder()
@@ -102,7 +101,6 @@ class CheckNamespacesCommand(sublime_plugin.TextCommand):
             return False
 
     """Remove project name from filename"""
-    # Index
     def remove_project_name(self, filename):
         # For some reason Sublime Text only prepends the project
         # folder name if it has more than 2 project folders

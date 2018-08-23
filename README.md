@@ -16,3 +16,5 @@ A set of plugins for making (PHP) development easier in Sublime Text
 
 - Check for PHP built in classes in PHP files
 - Remove unused classes
+- When inserting {} in an object insert a comma as well
+- Automatic End of Line

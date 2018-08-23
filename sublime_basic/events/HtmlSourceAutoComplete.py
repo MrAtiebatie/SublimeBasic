@@ -3,7 +3,7 @@ import re
 import glob
 import sublime
 import sublime_plugin
-from ..utils import Utils
+from ..classes.Project import Project
 
 class HtmlSourceAutoComplete(sublime_plugin.EventListener):
     def on_query_completions(self, view, prefix, locations):
@@ -14,7 +14,7 @@ class HtmlSourceAutoComplete(sublime_plugin.EventListener):
         if not any(x in scope for x in scopes):
             return
 
-        project = Utils.project_path()
+        project = Project.project_path()
 
         for sel in view.sel():
             line = view.line(sel.end())
