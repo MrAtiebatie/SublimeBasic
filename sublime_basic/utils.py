@@ -55,6 +55,8 @@ class Utils:
         if relative:
             filename = Project.project_path() + filename
 
+        print(filename)
+
         if os.path.isfile(filename) != True:
             raise Exception("File does not exists")
 

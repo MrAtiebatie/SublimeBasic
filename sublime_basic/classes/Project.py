@@ -7,7 +7,8 @@ class Project():
     def project_path():
         folders = sublime.active_window().folders()
 
-        folders = [folder for folder in folders if "Sublime Text" not in folder]
+        # Could be handy in the future
+        # folders = [folder for folder in folders if "Sublime Text" not in folder]
 
         if (len(folders) > 0):
             folder = folders[0]

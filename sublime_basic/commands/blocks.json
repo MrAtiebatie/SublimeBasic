@@ -1,0 +1,58 @@
+[
+    {
+        "scope": "source.php",
+        "character": ";"
+    },
+    {
+        "scope": "meta.class.php",
+        "character": " {$0}"
+    },
+    {
+        "scope": "meta.block.php",
+        "character": ";"
+    },
+    {
+        "scope": "meta.function.php",
+        "character": ";"
+    },
+    {
+        "scope": "entity.name.function.php",
+        "character": " {$0}"
+    },
+    {
+        "scope": "meta.function.parameters.php",
+        "character": " {$0}"
+    },
+    {
+        "scope": "meta.array.php",
+        "character": ","
+    },
+    {
+        "scope": "storage.type.class.php",
+        "character": " {$0}"
+    },
+    {
+        "scope": "meta.sequence.js",
+        "character": ","
+    },
+    {
+        "scope": "meta.object-literal.js",
+        "character": ","
+    },
+    {
+        "scope": "meta.group.braces.curly",
+        "character": ","
+    },
+    {
+        "scope": "meta.structure.array.json",
+        "character": ","
+    },
+    {
+        "scope": "meta.structure.dictionary.json",
+        "character": ","
+    },
+    {
+        "scope": "punctuation.section.array.end.php",
+        "character": ";"
+    }
+]
