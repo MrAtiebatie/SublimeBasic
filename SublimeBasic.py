@@ -14,6 +14,7 @@ from .sublime_basic.commands.NavigateInProjectCommand import NavigateInProjectCo
 from .sublime_basic.commands.SelectAllClassesCommand import SelectAllClassesCommand
 from .sublime_basic.commands.WrapText import PromptWrapTextCommand
 from .sublime_basic.commands.WrapText import WrapTextCommand
+from .sublime_basic.commands.CloseOtherTabsCommand import CloseOtherTabsCommand
 
 from .sublime_basic.commands.RemoveUnusedNamespacesCommand import RemoveUnusedNamespacesCommand
 from .sublime_basic.commands.CheckNamespacesCommand import CheckNamespacesCommand

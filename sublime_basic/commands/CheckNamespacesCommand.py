@@ -37,6 +37,13 @@ class CheckNamespacesCommand(sublime_plugin.TextCommand):
 
         self.import_or_quick_panel(self.single, self.multiple)
 
+        # If we start with the first unused dependency to remove the next regions are not corrent anymore
+        unused.reverse()
+
+        # We've disabled this because it's tricky if it removes a dependency by accident and we don't notice it
+        # for region in unused:
+        #     self.view.replace(edit, view.full_line(region), "")
+
     """Generate the differences between the used dependencies and the imported dependencies"""
     def generate_difference(self, dependencies_r, imported_r):
         dependencies = list()
@@ -139,6 +146,7 @@ class CheckNamespacesCommand(sublime_plugin.TextCommand):
 
         occurences.pop(0)
 
+        # print(occurences)
         self.definitions = occurences[0]
 
         sublime.active_window().show_quick_panel(occurences[0], self.on_done)

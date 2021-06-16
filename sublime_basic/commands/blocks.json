@@ -28,6 +28,10 @@
         "character": ","
     },
     {
+        "scope": "meta.array.php meta.function.php meta.block.php",
+        "character": ";"
+    },
+    {
         "scope": "storage.type.class.php",
         "character": " {$0}"
     },
@@ -37,10 +41,6 @@
     },
     {
         "scope": "meta.object-literal.js",
-        "character": ","
-    },
-    {
-        "scope": "meta.group.braces.curly",
         "character": ","
     },
     {
@@ -54,5 +54,29 @@
     {
         "scope": "punctuation.section.array.end.php",
         "character": ";"
+    },
+    {
+        "scope": "meta.field.declaration.ts",
+        "character": ";"
+    },
+    {
+        "scope": "meta.object.member.ts",
+        "character": ","
+    },
+    {
+        "scope": "meta.objectliteral.ts",
+        "character": "}"
+    },
+    {
+        "scope": "meta.block.ts",
+        "character": ";"
+    },
+    {
+        "scope": "meta.class.ts",
+        "character": "}"
+    },
+    {
+        "scope": "meta.array.literal.ts",
+        "character": ","
     }
 ]
